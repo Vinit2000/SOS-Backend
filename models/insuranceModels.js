@@ -3,4 +3,6 @@
 2. Phone Number
 3. Patient ID
 4. Reference #
-5. Representative Name */
+5. Representative Name 
+6. Email
+7. Password*/
