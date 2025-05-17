@@ -1,11 +1,9 @@
-/* Required Schema for the Project (Vinit)
+/* Required Schema for the Project
 1. Patient Name
 2. Phone Number
 3. Patient ID
 4. Reference #
-5. Representative Name 
-6. Email
-7. Password*/
+5. Representative Name*/
 
 const mongoose = require('mongoose');
 
@@ -14,17 +12,6 @@ const patientSchema = new mongoose.Schema({
         type:String,
         required:true,
         match:/^[\w\s]+$/
-    },
-    email:{
-        type: String,
-        required:true,
-        unique:true,
-        match: /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/
-    },
-    password:{
-        type:String,
-        required:true,
-        minlength:6
     },
     patientId:{
         type: String,
