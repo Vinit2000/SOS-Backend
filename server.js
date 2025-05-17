@@ -1,26 +1,38 @@
 const express = require("express");
 const cors = require("cors");
 const connectToDatabase = require('./config/db')
-const insuranceRoutes = require('./routes/insuranceRoutes');
+const router = require('./routes/insuranceRoutes');
 
 const app = express();
 const PORT = 5000;
 
 const allowedOrigins = [
-    'https://localhost:5173'  //frontend deployed link should be pasted here
+    'https://localhost:5173',  //frontend deployed link should be pasted here
+    // 'frontendlink',
 ]
 
-// DB connection
-connectToDatabase();
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST'],
+  credentials: true,
+}));
+
+app.options('*', cors());
 
 app.use(express.json());
-//connect to the mongoDb database
 
-app.use('/', insuranceRoutes);
-// Define a basic route for the home page
+connectToDatabase();
+
+app.use('/', router);
 
 app.get('/', (req, res) => {
-  res.send('Welcome to the API'); // Send a welcome message
+  res.send('Welcome to the API');
 });
 
 app.listen(PORT, () => {

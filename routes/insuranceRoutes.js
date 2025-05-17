@@ -5,7 +5,7 @@ const {getInsuranceForm,addInsuranceForm}=require('../controllers/insuranceContr
 const router=express.Router();
 
 // fist parameter is path and second is call back function which is coming from controllers
-router.get('/getinsuranceforms', getInsuranceForm);
+router.get('/getinsuranceform', getInsuranceForm);
 router.post('/addinsuranceform', addInsuranceForm);
 
-module.exports=router;
+module.exports = router

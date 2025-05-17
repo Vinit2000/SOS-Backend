@@ -1,5 +1,4 @@
-const Insurance=require('../models/insuranceModels');
-const bcrypt=require('bcryptjs');
+const Patient = require('../models/insuranceModels');
 require('dotenv').config();
 
 exports.getInsuranceForm = async (req, res) => {
@@ -8,7 +7,7 @@ exports.getInsuranceForm = async (req, res) => {
     let filter = {};
     if (name) filter.name = new RegExp(name, "i");
     
-    const insuranceForms = await Insurance.find(filter);
+    const insuranceForms = await Patient.find(filter);
     res.json(insuranceForms);
   } catch (error) {
     console.error("Error getting insurance forms:", error);
@@ -18,18 +17,17 @@ exports.getInsuranceForm = async (req, res) => {
 
 exports.addInsuranceForm = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
-    if (!name || !email || !password || !confirmPassword) {
+    const { name, patientId, representativeName, reference, phoneNumber } = req.body;
+    if (!name || !patientId || !representativeName || !reference || !phoneNumber) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const existingForm = await Insurance.findOne({ phone });
+    const existingForm = await Patient.findOne({ patientId });
     if (existingForm) {
-      return res.status(400).json({ message: 'Phone No. already is use' });
+      return res.status(400).json({ message: 'Patient Id already is use' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newInsuranceForm = new Student({ name, email, password: hashedPassword });
+    const newInsuranceForm = new Patient({ name, patientId, reference, representativeName, phoneNumber });
     await newInsuranceForm.save();
     
     res.status(201).json({ message: 'Form submitted successfully' });
