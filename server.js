@@ -13,6 +13,16 @@ const allowedOrigins = [
 // DB connection
 connectToDatabase();
 
+app.use(express.json());
+//connect to the mongoDb database
+
+app.use('/', insuranceRoutes);
+// Define a basic route for the home page
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the API'); // Send a welcome message
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
