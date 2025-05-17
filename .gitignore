@@ -1,2 +1,6 @@
 node_modules/
 .env
+<<<<<<< HEAD
+=======
+index.js 
+>>>>>>> 43ea8ee6d873dc3e4c42e0ca53d112b3bf2350b9
