@@ -1,9 +1,9 @@
-const mongoose = require('mongoose'); // Importing Mongoose for MongoDB connection
-require('dotenv').config(); // Loading environment variables from .env file
+const mongoose = require('mongoose');
+require("dotenv").config()
 
-// Fetch the MongoDB connection string from environment variables
-const CONNECTION_STRING = process.env.MONGO_URI;
+const  CONNECTION_STRING = process.env.MONGO_URI
 
+<<<<<<< HEAD
 /* Function to connect to MongoDB using Mongoose */
 const connectToDatabase = async () => {
   try {
@@ -20,5 +20,16 @@ const connectToDatabase = async () => {
     process.exit(1); // Exit the application if DB connection fails
   }
 };
+=======
+const connectToDatabase = async ()=>{
+    try {
+        await mongoose.connect(CONNECTION_STRING);
+        console.log("Connected to Database");
+    } catch (error) {
+        console.log("Error in Connecting to Database", error);
+        process.exit(1);
+    }
+}
+>>>>>>> 81343147e952e427fa7195f3ba26b9065927eddd
 
-module.exports = connectToDatabase;
+module.exports = connectToDatabase
