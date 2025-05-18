@@ -2,19 +2,19 @@ const User = require('../models/dentalModel');
 const bcrypt=require('bcryptjs');
 require('dotenv').config();
 
-// exports.getdentalForm = async (req, res) => {
-//   try {
-//     const { name } = req.query;
-//     let filter = {};
-//     if (name) filter.name = new RegExp(name, "i");
+exports.getdentalForm = async (req, res) => {
+  try {
+    const { name } = req.query;
+    let filter = {};
+    if (name) filter.name = new RegExp(name, "i");
     
-//     const dentalForms = await dental.find(filter);
-//     res.json(dentalForms);
-//   } catch (error) {
-//     console.error("Error getting dental forms:", error);
-//     res.status(500).json({ message: "Error getting dental forms" });
-//   }
-// };
+    const dentalForms = await dental.find(filter);
+    res.json(dentalForms);
+  } catch (error) {
+    console.error("Error getting dental forms:", error);
+    res.status(500).json({ message: "Error getting dental forms" });
+  }
+};
 
 exports.addDentalForm = async (req, res) => {
   try {

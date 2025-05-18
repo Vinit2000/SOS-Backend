@@ -26,7 +26,7 @@ exports.addInsuranceForm = async (req, res) => {
     if (existingForm) {
       return res.status(400).json({ message: 'Patient Id already is use' });
     }
- 
+
     const newInsuranceForm = new Patient({ name, patientId, reference, representativeName, phoneNumber });
     await newInsuranceForm.save();
     
