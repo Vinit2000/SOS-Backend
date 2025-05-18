@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const connectToDatabase = require('./config/db')
-const router = require('./routes/insuranceRoutes');
+const insuranceRoutes = require('./routes/insuranceRoutes');
 
 const app = express();
 const PORT = 5000;
@@ -23,13 +23,11 @@ app.use(cors({
   credentials: true,
 }));
 
-app.options('*', cors());
-
 app.use(express.json());
 
 connectToDatabase();
 
-app.use('/', router);
+app.use('/', insuranceRoutes);
 
 app.get('/', (req, res) => {
   res.send('Welcome to the API');
@@ -37,4 +35,4 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-  });
+});

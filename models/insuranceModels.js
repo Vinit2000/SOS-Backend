@@ -27,9 +27,9 @@ const patientSchema = new mongoose.Schema({
     },
     phoneNumber:{
         type:String,
-        match:/[0-9]{10}$/
+        match:/^[0-9]{10}$/
     },
-})
+},{versionKey:false})
 
 const Patient = mongoose.model('Patient', patientSchema ,'insuranceforms' )
 
