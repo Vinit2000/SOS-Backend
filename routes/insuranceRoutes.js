@@ -1,7 +1,7 @@
 const express=require('express');
 
 const {getInsuranceForm,addInsuranceForm}=require('../controllers/insuranceController');
-const { addDentalForm, getDentalForm } = require('../controllers/dentalController');
+const {addDentalForm} = require('../controllers/dentalController');
 
 const router=express.Router();
 
