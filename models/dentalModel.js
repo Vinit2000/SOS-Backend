@@ -1,29 +1,25 @@
-/* Required Schema for the Project
-1. Name 
-6. Email
-7. Password*/
-
+// models/userModel.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
-        match:/^[\w\s]+$/
-    },
-    email:{
+    name: {
         type: String,
-        required:true,
-        unique:true,
-        match: /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/
+        required: [true, 'Name is required'],
+        trim: true,
+        match: [/^[\w\s]+$/, 'Invalid characters in name']
     },
-    password:{
-        type:String,
-        required:true,
-        minlength:6
+    email: {
+        type: String,
+        required: [true, 'Email is required'],
+        trim: true,
+        lowercase: true,
+        match: [/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid email format']
     },
-})
+    password: {
+        type: String,
+        required: [true, 'Password is required'],
+        minlength: [6, 'Password must be at least 6 characters']
+    },
+}, { versionKey: false, collection: 'dentalcompany' });
 
-module.exports = mongoose.model('User', userSchema ,'dentalcompany' )
-
-
+module.exports = mongoose.model('User', userSchema);

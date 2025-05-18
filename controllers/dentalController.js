@@ -29,6 +29,8 @@ exports.addDentalForm = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
     const newdentalForm = new User({ name, email, password: hashedPassword});
     await newdentalForm.save();
     
