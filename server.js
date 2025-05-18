@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const connectToDatabase = require('./config/db')
-const router = require('./routes/insuranceRoutes');
+const insuranceRouter = require('./routes/insuranceRoutes');
 
 const app = express();
 const PORT = 5000;
@@ -23,13 +23,11 @@ app.use(cors({
   credentials: true,
 }));
 
-app.options('*', cors());
-
 app.use(express.json());
 
 connectToDatabase();
 
-app.use('/', router);
+app.use('/', insuranceRouter);
 
 app.get('/', (req, res) => {
   res.send('Welcome to the API');

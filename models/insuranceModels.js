@@ -16,7 +16,7 @@ const patientSchema = new mongoose.Schema({
     patientId:{
         type: String,
         required:true,
-        unique:true
+        // unique:true
     },
     representativeName:{
         type:String,
