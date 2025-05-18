@@ -1,5 +1,4 @@
 const User = require('../models/dentalModel');
-//const dental=require('../models/dentalModel');
 const bcrypt=require('bcryptjs');
 require('dotenv').config();
 
