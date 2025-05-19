@@ -12,6 +12,7 @@ const patientSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Patient ID is required'],
         trim: true,
+        match: /^[0-9]+$/
     },
     representativeName: {
         type: String,

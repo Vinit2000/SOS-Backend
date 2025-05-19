@@ -1,7 +1,7 @@
 const express=require('express');
 
 const {getInsuranceForm,addInsuranceForm}=require('../controllers/insuranceController');
-const {addDentalForm, getdentalForm } = require('../controllers/dentalController');
+const {addDentalForm, getDentalForm } = require('../controllers/dentalController');
 
 const router=express.Router();
 
@@ -10,6 +10,6 @@ router.get('/getinsuranceform', getInsuranceForm);
 router.post('/addinsuranceform', addInsuranceForm);
 
 router.post('/adddentalform', addDentalForm);
-router.get('/getdentalform', getdentalForm)
+router.get('/getdentalform', getDentalForm);
 
 module.exports = router

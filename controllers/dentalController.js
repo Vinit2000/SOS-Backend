@@ -2,13 +2,13 @@ const User = require('../models/dentalModel');
 const bcrypt=require('bcryptjs');
 require('dotenv').config();
 
-exports.getdentalForm = async (req, res) => {
+exports.getDentalForm = async (req, res) => {
   try {
     const { name } = req.query;
     let filter = {};
     if (name) filter.name = new RegExp(name, "i");
     
-    const dentalForms = await dental.find(filter);
+    const dentalForms = await User.find(filter);
     res.json(dentalForms);
   } catch (error) {
     console.error("Error getting dental forms:", error);
