@@ -9,6 +9,7 @@ const router=express.Router();
 router.get('/getinsuranceform', getInsuranceForm);
 router.post('/addinsuranceform', addInsuranceForm);
 
+//working fine
 router.post('/adddentalform', addDentalForm);
 router.get('/getdentalform', getdentalForm)
 
