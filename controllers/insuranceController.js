@@ -22,9 +22,14 @@ exports.addInsuranceForm = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const existingForm = await Patient.findOne({ patientId });
-    if (existingForm) {
-      return res.status(400).json({ message: 'Patient Id already is use' });
+   // Check for existing patient using patientId only (more efficient)
+    const existingPatient = await Patient.exists({ patientId });
+    if (existingPatient) {
+      return res.status(409).json({ 
+        success: false,
+        message: 'Patient ID already in use',
+        field: 'patientId'
+      });
     }
 
     const newInsuranceForm = new Patient({ name, patientId, reference, representativeName, phoneNumber });
