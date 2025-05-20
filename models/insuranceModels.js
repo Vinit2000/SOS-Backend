@@ -9,7 +9,8 @@ const patientSchema = new mongoose.Schema({
     patientId: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        match: /^[0-9]+$/
     },
     representativeName: {
         type: String,
