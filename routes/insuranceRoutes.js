@@ -1,15 +1,19 @@
 const express=require('express');
 
-const {getInsuranceForm,addInsuranceForm}=require('../controllers/insuranceController');
+const {getInsuranceForm, addInsuranceForm, saveInsuranceFormConfig, getInsuranceFormConfig}=require('../controllers/insuranceController');
 const {addDentalForm, getDentalForm } = require('../controllers/dentalController');
 
 const router=express.Router();
 
-// fist parameter is path and second is call back function which is coming from controllers
+// Existing routes
 router.get('/getinsuranceform', getInsuranceForm);
 router.post('/addinsuranceform', addInsuranceForm);
 
-//working fine
+// New routes for form configuration
+router.post('/saveinsuranceform', saveInsuranceFormConfig);
+router.get('/getinsuranceformconfig/:officeId', getInsuranceFormConfig);
+
+// Dental routes (working fine)
 router.post('/adddentalform', addDentalForm);
 router.get('/getdentalform', getDentalForm);
 

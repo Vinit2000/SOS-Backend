@@ -32,4 +32,4 @@ const patientSchema = new mongoose.Schema({
 // Create index only on patientId
 patientSchema.index({ patientId: 1 }, { unique: true });
 
-module.exports = mongoose.model('Patient', patientSchema, 'insuranceforms');
+module.exports = mongoose.model('Patient', patientSchema, 'dentalcompany');
