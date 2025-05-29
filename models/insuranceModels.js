@@ -36,10 +36,6 @@ const patientSchema = new mongoose.Schema({
 // Ensure uniqueness in DB
 patientSchema.index({ patientId: 1 }, { unique: true });
 
-<<<<<<< HEAD
-module.exports = mongoose.model('Patient', patientSchema, 'insuranceforms');
-=======
 const Patient=mongoose.model("Patient",patientSchema,"insuranceforms");
 
 module.exports = Patient;
->>>>>>> 7740c5d7cd73a220c44fe4c2145ff9fad3b66023
