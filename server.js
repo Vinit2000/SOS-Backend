@@ -8,7 +8,7 @@ const PORT = 5000;
 
 const allowedOrigins = [
     // 'http://localhost:5173',  //frontend deployed link should be pasted here
-    "https://spot-on-schedulers-frontend-2rk4.vercel.app"// 'frontendlink',
+    "https://spot-on-schedulers-frontend-btrw.vercel.app"// 'frontendlink',
 ]
 
 app.use(cors({
