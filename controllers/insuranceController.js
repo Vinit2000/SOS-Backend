@@ -1,8 +1,8 @@
 const Patient = require('../models/insuranceModels');
-const FormConfiguration = require('../models/formConfiguration'); // Add this import
+const FormConfiguration = require('../models/formConfiguration');
 require('dotenv').config();
 
-// Your existing functions
+// Get all insurance forms
 exports.getInsuranceForm = async (req, res) => {
   try {
     const { name } = req.query;
@@ -17,15 +17,35 @@ exports.getInsuranceForm = async (req, res) => {
   }
 };
 
+// Add new insurance form
 exports.addInsuranceForm = async (req, res) => {
   try {
     const { name, patientId, representativeName, reference, phoneNumber } = req.body;
+    
+    // Validate required fields
     if (!name || !patientId || !representativeName || !reference || !phoneNumber) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-   // Check for existing patient using patientId only (more efficient)
-    const existingPatient = await Patient.exists({ patientId });
+    // Validate field formats
+    if (!/^[A-Za-z\s]+$/.test(name)) {
+      return res.status(400).json({ message: 'Invalid name format' });
+    }
+    if (!/^[0-9]+$/.test(patientId)) {
+      return res.status(400).json({ message: 'Patient ID must contain only numbers' });
+    }
+    if (!/^[A-Za-z\s]+$/.test(representativeName)) {
+      return res.status(400).json({ message: 'Invalid representative name format' });
+    }
+    if (!/^[A-Za-z0-9\-]*$/.test(reference)) {
+      return res.status(400).json({ message: 'Invalid reference format' });
+    }
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      return res.status(400).json({ message: 'Phone number must be 10 digits' });
+    }
+
+    // Check for existing patient
+    const existingPatient = await Patient.findOne({ patientId });
     if (existingPatient) {
       return res.status(409).json({ 
         success: false,
@@ -34,13 +54,27 @@ exports.addInsuranceForm = async (req, res) => {
       });
     }
 
-    const newInsuranceForm = new Patient({ name, patientId, reference, representativeName, phoneNumber });
+    // Create and save new form
+    const newInsuranceForm = new Patient({ 
+      name, 
+      patientId, 
+      reference, 
+      representativeName, 
+      phoneNumber 
+    });
+    
     await newInsuranceForm.save();
     
-    res.status(201).json({ message: 'Form submitted successfully' });
+    res.status(201).json({ 
+      message: 'Form submitted successfully',
+      data: newInsuranceForm
+    });
   } catch (error) {
     console.error('Error submitting form:', error);
-    res.status(500).json({ message: 'Error submitting form' });
+    res.status(500).json({ 
+      message: 'Error submitting form',
+      error: error.message
+    });
   }
 };
 
@@ -88,7 +122,6 @@ exports.saveInsuranceFormConfig = async (req, res) => {
     } else {
       const newConfig = new FormConfiguration(configData);
       await newConfig.save();
-
       console.log('Created new configuration');
       return res.status(201).json({
         message: 'Form configuration created successfully',
@@ -117,7 +150,6 @@ exports.getInsuranceFormConfig = async (req, res) => {
         message: 'No form configuration found'
       });
     }
-
     console.log('Configuration found:', configuration);
     res.status(200).json(configuration);
   } catch (error) {
