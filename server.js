@@ -7,7 +7,7 @@ const app = express();
 const PORT = 5000;
 
 const allowedOrigins = [
-    // 'http://localhost:5173',  //frontend deployed link should be pasted here
+    'http://localhost:5173',  //frontend deployed link should be pasted here
     "https://spot-on-schedulers-frontend-btrw.vercel.app"// 'frontendlink',
 ]
 
