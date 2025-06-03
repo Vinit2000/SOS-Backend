@@ -45,78 +45,79 @@ exports.addInsuranceForm = async (req, res) => {
 };
 
 // New functions for form configuration
+
 exports.saveInsuranceFormConfig = async (req, res) => {
   try {
-    const { officeName, officeId, formFields, updatedAt } = req.body;
-    
+    const {
+      conName,
+      conPatientId,
+      conRepresentativeName,
+      conReference,
+      conPhoneNumber
+    } = req.body;
+
     console.log('Received form configuration:', req.body);
-    
-    // Validate required fields
-    if (!officeName || !formFields || !Array.isArray(formFields)) {
+
+    // conName is now a required string identifier (not a checkbox)
+    if (!conName || typeof conName !== 'string') {
       return res.status(400).json({
-        message: 'Office name and form fields are required'
+        message: 'conName (string) is required to identify the configuration'
       });
     }
 
-    // Check if configuration already exists for this office
-    let existingConfig = await FormConfiguration.findOne({ 
-      officeId: officeId 
-    });
+    const configData = {
+      conName: conName.trim(),
+      conPatientId: !!conPatientId,
+      conRepresentativeName: !!conRepresentativeName,
+      conReference: !!conReference,
+      conPhoneNumber: !!conPhoneNumber
+    };
+
+    // Check if configuration exists by name
+    let existingConfig = await FormConfiguration.findOne({ conName: configData.conName });
 
     if (existingConfig) {
-      // Update existing configuration
-      existingConfig.formFields = formFields;
-      existingConfig.updatedAt = updatedAt || new Date();
+      Object.assign(existingConfig, configData);
       await existingConfig.save();
-      
+
       console.log('Updated existing configuration');
-      res.status(200).json({
+      return res.status(200).json({
         message: 'Form configuration updated successfully',
         data: existingConfig
       });
     } else {
-      // Create new configuration
-      const newConfig = new FormConfiguration({
-        officeName,
-        officeId,
-        formFields,
-        createdAt: new Date(),
-        updatedAt: updatedAt || new Date()
-      });
-      
+      const newConfig = new FormConfiguration(configData);
       await newConfig.save();
-      
+
       console.log('Created new configuration');
-      res.status(201).json({
+      return res.status(201).json({
         message: 'Form configuration created successfully',
         data: newConfig
       });
     }
   } catch (error) {
     console.error('Error saving form configuration:', error);
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Internal server error',
       error: error.message
     });
   }
 };
 
+
+// Get the global form configuration
 exports.getInsuranceFormConfig = async (req, res) => {
   try {
-    const { officeId } = req.params;
-    
-    console.log('Fetching configuration for office ID:', officeId);
-    
-    const configuration = await FormConfiguration.findOne({
-      officeId: officeId
-    });
-    
+    console.log('Fetching global form configuration');
+
+    const configuration = await FormConfiguration.findOne();
+
     if (!configuration) {
       return res.status(404).json({
-        message: 'No form configuration found for this office'
+        message: 'No form configuration found'
       });
     }
-    
+
     console.log('Configuration found:', configuration);
     res.status(200).json(configuration);
   } catch (error) {

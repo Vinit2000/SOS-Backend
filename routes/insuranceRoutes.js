@@ -11,7 +11,7 @@ router.post('/addinsuranceform', addInsuranceForm);
 
 // New routes for form configuration
 router.post('/saveinsuranceform', saveInsuranceFormConfig);
-router.get('/getinsuranceformconfig/:officeId', getInsuranceFormConfig);
+router.get('/getinsuranceformconfig/name/:name', getInsuranceFormConfig);
 
 // Dental routes (working fine)
 router.post('/adddentalform', addDentalForm);
