@@ -1,8 +1,8 @@
 const Patient = require('../models/insuranceModels');
-const FormConfiguration = require('../models/formConfiguration'); // Add this import
+const FormConfiguration = require('../models/formConfiguration');
 require('dotenv').config();
 
-// Your existing functions
+// Get all insurance forms
 exports.getInsuranceForm = async (req, res) => {
   try {
     const { name } = req.query;
@@ -17,15 +17,35 @@ exports.getInsuranceForm = async (req, res) => {
   }
 };
 
+// Add new insurance form
 exports.addInsuranceForm = async (req, res) => {
   try {
     const { name, patientId, representativeName, reference, phoneNumber } = req.body;
+    
+    // Validate required fields
     if (!name || !patientId || !representativeName || !reference || !phoneNumber) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-   // Check for existing patient using patientId only (more efficient)
-    const existingPatient = await Patient.exists({ patientId });
+    // Validate field formats
+    if (!/^[A-Za-z\s]+$/.test(name)) {
+      return res.status(400).json({ message: 'Invalid name format' });
+    }
+    if (!/^[0-9]+$/.test(patientId)) {
+      return res.status(400).json({ message: 'Patient ID must contain only numbers' });
+    }
+    if (!/^[A-Za-z\s]+$/.test(representativeName)) {
+      return res.status(400).json({ message: 'Invalid representative name format' });
+    }
+    if (!/^[A-Za-z0-9\-]*$/.test(reference)) {
+      return res.status(400).json({ message: 'Invalid reference format' });
+    }
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      return res.status(400).json({ message: 'Phone number must be 10 digits' });
+    }
+
+    // Check for existing patient
+    const existingPatient = await Patient.findOne({ patientId });
     if (existingPatient) {
       return res.status(409).json({ 
         success: false,
@@ -34,58 +54,59 @@ exports.addInsuranceForm = async (req, res) => {
       });
     }
 
-    const newInsuranceForm = new Patient({ name, patientId, reference, representativeName, phoneNumber });
+    // Create and save new form
+    const newInsuranceForm = new Patient({ 
+      name, 
+      patientId, 
+      reference, 
+      representativeName, 
+      phoneNumber 
+    });
+    
     await newInsuranceForm.save();
     
-    res.status(201).json({ message: 'Form submitted successfully' });
+    res.status(201).json({ 
+      message: 'Form submitted successfully',
+      data: newInsuranceForm
+    });
   } catch (error) {
     console.error('Error submitting form:', error);
-    res.status(500).json({ message: 'Error submitting form' });
+    res.status(500).json({ 
+      message: 'Error submitting form',
+      error: error.message
+    });
   }
 };
-
-// New functions for form configuration
 exports.saveInsuranceFormConfig = async (req, res) => {
   try {
-    const { officeName, officeId, formFields, updatedAt } = req.body;
-    
+    const {
+      conName,
+      conPatientId,
+      conRepresentativeName,
+      conReference,
+      conPhoneNumber
+    } = req.body;
     console.log('Received form configuration:', req.body);
-    
-    // Validate required fields
-    if (!officeName || !formFields || !Array.isArray(formFields)) {
-      return res.status(400).json({
-        message: 'Office name and form fields are required'
-      });
-    }
-
-    // Check if configuration already exists for this office
-    let existingConfig = await FormConfiguration.findOne({ 
-      officeId: officeId 
-    });
-
+    const configData = {
+      conName: !!conName,
+      conPatientId: !!conPatientId,
+      conRepresentativeName: !!conRepresentativeName,
+      conReference: !!conReference,
+      conPhoneNumber: !!conPhoneNumber
+    };
+    // Check if any configuration exists (only one allowed)
+    let existingConfig = await FormConfiguration.findOne();
     if (existingConfig) {
-      // Update existing configuration
-      existingConfig.formFields = formFields;
-      existingConfig.updatedAt = updatedAt || new Date();
+      Object.assign(existingConfig, configData);
       await existingConfig.save();
-      
       console.log('Updated existing configuration');
       res.status(200).json({
         message: 'Form configuration updated successfully',
         data: existingConfig
       });
     } else {
-      // Create new configuration
-      const newConfig = new FormConfiguration({
-        officeName,
-        officeId,
-        formFields,
-        createdAt: new Date(),
-        updatedAt: updatedAt || new Date()
-      });
-      
+      const newConfig = new FormConfiguration(configData);
       await newConfig.save();
-      
       console.log('Created new configuration');
       res.status(201).json({
         message: 'Form configuration created successfully',
@@ -100,23 +121,16 @@ exports.saveInsuranceFormConfig = async (req, res) => {
     });
   }
 };
-
+// Get the global form configuration
 exports.getInsuranceFormConfig = async (req, res) => {
   try {
-    const { officeId } = req.params;
-    
-    console.log('Fetching configuration for office ID:', officeId);
-    
-    const configuration = await FormConfiguration.findOne({
-      officeId: officeId
-    });
-    
+    console.log('Fetching global form configuration');
+    const configuration = await FormConfiguration.findOne();
     if (!configuration) {
       return res.status(404).json({
-        message: 'No form configuration found for this office'
+        message: 'No form configuration found'
       });
     }
-    
     console.log('Configuration found:', configuration);
     res.status(200).json(configuration);
   } catch (error) {

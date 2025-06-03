@@ -1,36 +1,34 @@
 const mongoose = require('mongoose');
-
 const formConfigurationSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    match: /^[A-Za-z\s]+$/
+  conName: {
+    type: Boolean,
+    required: true,
+    default: false
   },
-  patientId: {
-    type: String,
-    unique: true,
-    match: /^[0-9]+$/
+  conPatientId: {
+    type: Boolean,
+    required: true,
+    default: false
   },
-  representativeName: {
-    type: String,
-    match: /^[A-Za-z\s]+$/,
+  conRepresentativeName: {
+    type: Boolean,
+    required: true,
+    default: false
   },
-  reference: {
-    type: String, // Change from Number if alphanumeric
-    match: /^[A-Za-z0-9\-]*$/,
+  conReference: {
+    type: Boolean,
+    required: true,
+    default: false
   },
-  phoneNumber: {
-    type: String,
-    match: /^\d{10}$/,
+  conPhoneNumber: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 }, {
   versionKey: false,
   strict: 'throw',
-  timestamps: true // Optional
+  timestamps: true
 });
-
-// Create compound index to ensure unique configuration per office
-formConfigurationSchema.index({ officeId: 1 }, { unique: true });
-
 const FormConfiguration = mongoose.model('FormConfiguration', formConfigurationSchema, "formconfiguration");
-
 module.exports = FormConfiguration;
