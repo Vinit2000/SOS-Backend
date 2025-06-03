@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const formConfigurationSchema = new mongoose.Schema({
   conName: {
-    type: String,
+    type: Boolean,
     required: true,
-    unique: true
+    default: false
   },
   conPatientId: {
     type: Boolean,
