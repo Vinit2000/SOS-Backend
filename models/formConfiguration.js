@@ -30,5 +30,7 @@ const formConfigurationSchema = new mongoose.Schema({
   strict: 'throw',
   timestamps: true
 });
+
 const FormConfiguration = mongoose.model('FormConfiguration', formConfigurationSchema, "formconfiguration");
+
 module.exports = FormConfiguration;
