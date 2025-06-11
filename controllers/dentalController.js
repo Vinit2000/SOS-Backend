@@ -40,3 +40,36 @@ exports.addDentalForm = async (req, res) => {
     res.status(500).json({ message: 'Error submitting Company' });
   }
 };
+
+exports.updateInsuranceForm = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      isNameDisabled,
+      isPatientIdDisabled,
+      isRepresentativeNameDisabled,
+      isReferenceDisabled,
+      isPhoneNumberDisabled
+    } = req.body;
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'Office not found' });
+    }
+
+    // Update only checkbox fields if they exist in req.body
+    if (typeof isNameDisabled !== 'undefined') user.isNameDisabled = !!isNameDisabled;
+    if (typeof isPatientIdDisabled !== 'undefined') user.isPatientIdDisabled = !!isPatientIdDisabled;
+    if (typeof isRepresentativeNameDisabled !== 'undefined') user.isRepresentativeNameDisabled = !!isRepresentativeNameDisabled;
+    if (typeof isReferenceDisabled !== 'undefined') user.isReferenceDisabled = !!isReferenceDisabled;
+    if (typeof isPhoneNumberDisabled !== 'undefined') user.isPhoneNumberDisabled = !!isPhoneNumberDisabled;
+
+    await user.save();  // <-- Correct usage here
+
+    res.json({ message: 'Dental form updated successfully' });
+
+  } catch (error) {
+    console.error('Error updating form:', error);
+    res.status(500).json({ message: 'Error updating form' });
+  }
+};

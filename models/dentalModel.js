@@ -21,6 +21,26 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password is required'],
         minlength: [6, 'Password must be at least 6 characters']
     },
+    isNameDisabled:{
+        type: Boolean,
+        default: false,
+    },
+    isPatientIdDisabled:{
+        type: Boolean,
+        default: false,
+    },
+    isRepresentativeNameDisabled:{
+        type: Boolean,
+        default: false,
+    },
+    isReferenceDisabled:{
+        type: Boolean,
+        default: false,
+    },
+    isPhoneNumberDisabled:{
+        type: Boolean,
+        default: false,
+    },
 }, { versionKey: false});
 
 const User=mongoose.model('User', userSchema,'dentalcompany');
